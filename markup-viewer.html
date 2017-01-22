@@ -2,7 +2,7 @@
 
 <template id="template">
 <div id="viewer">Loading...</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/commonmark/0.27.0/commonmark.min.js"></script>
+<script src="bower_components/commonmark/dist/commonmark.min.js"></script>
 <script>
 
 /**
@@ -91,7 +91,8 @@ function jumpToHashtag() {
 </script>
 </template>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.23/webcomponents.min.js"></script>
+<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
 <script>
 var thisDocument = document.currentScript.ownerDocument;
 var thisElement = Object.create(HTMLElement.prototype);

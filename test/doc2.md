@@ -1,6 +1,6 @@
 This is a sample page.
 
-[Section 1](sample-link.md#section1)
+[Section 1](doc2.md#section1)
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
@@ -12,4 +12,4 @@ Section 1
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-[go back](sample.md)
+[go back](doc1.md)

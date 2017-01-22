@@ -11,4 +11,4 @@ JavaScript reference implementation.
 
 The text avobe is from [here](http://spec.commonmark.org/dingus/).
 
-[sample link](sample-link.md#hash)
+[sample link](doc2.md#hash)
