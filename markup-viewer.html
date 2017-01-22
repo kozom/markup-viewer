@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<template id="template">
+<div id="viewer">Loading...</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/commonmark/0.27.0/commonmark.min.js"></script>
+<script>
+
+/**
+ * Main script.
+ */
+window.onload = function() {
+    var markup = getParameterByName("markup", window.location.search);
+    if (markup) {
+        updateMarkup(markup);
+    } else {
+        document.getElementById("viewer").innerHTML
+            = "Please specify 'markup' query like below.<br><code>"
+            + window.location.origin + window.location.pathname
+            + "?markup=&lturi-of-a-markup-file&gt</code>";
+    }
+}
+
+/**
+ * Get a value of the first query matching argument 'name'.
+ * @param  {string}  name Name of the query
+ * @param  {string}  uri  URI to search the query from
+ * @return {?string}      Parameter of the query, or null
+ */
+function getParameterByName(name, uri) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(uri);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+/**
+ * Get contents of a markup file
+ * @param {string} uri URI of the markup file
+ */
+function updateMarkup(uri) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            document.getElementById("viewer").innerHTML = xhr.responseText;
+            renderCommonmark();
+            replaceLink("md");
+            jumpToHashtag();
+        }
+    };
+    xhr.open("GET", uri, true);
+    xhr.send();
+}
+
+/**
+ * Parse and render the markup written in commonmark.
+ * <https://github.com/jgm/commonmark.js>
+ */
+function renderCommonmark() {
+    var reader = new commonmark.Parser();
+    var parsed = reader.parse(document.getElementById("viewer").innerHTML);
+    var writer = new commonmark.HtmlRenderer();
+    document.getElementById("viewer").innerHTML = writer.render(parsed);
+}
+
+/**
+ * Replace all links of markup files for AJAX requests
+ * @param {string} extension Extension of target markup files
+ */
+function replaceLink(extension) {
+    var links = document.getElementById("viewer").getElementsByTagName("a");
+    Array.prototype.forEach.call(links, function(l) {
+        if (RegExp("\." + extension + "$").exec(l.pathname)) {
+            l.onclick = function() {
+                var href = (RegExp(l.origin).exec(l.href))
+                    ? l.pathname + l.search + l.hash: l.href;
+                updateMarkup(href);
+                history.pushState(null, document.title, "?markup=" + href);
+                return false;
+            };
+        }
+    });
+}
+
+/**
+ * Just jump to hashtag of current address bar
+ */
+function jumpToHashtag() {
+    var hashtag = location.hash;
+    location.hash = "";
+    location.hash = hashtag;
+}
+
+</script>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.23/webcomponents.min.js"></script>
+<script>
+var thisDocument = document.currentScript.ownerDocument;
+var thisElement = Object.create(HTMLElement.prototype);
+thisElement.createdCallback = function() {
+    var template = thisDocument.getElementById("template");
+    var clone = document.importNode(template.content, true);
+    this.appendChild(clone);
+}
+document.registerElement('markup-viewer', {
+    prototype: thisElement,
+});
+</script>
