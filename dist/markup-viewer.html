@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 
+<script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+<script src="../../commonmark/dist/commonmark.min.js"></script>
+<script src="../../asciidoctor.js/dist/asciidoctor-all.min.js"></script>
+
 <template id="template">
 <div id="viewer">Loading...</div>
-<script src="../commonmark/dist/commonmark.min.js"></script>
-<script src="../asciidoctor.js/dist/asciidoctor-all.min.js"></script>
 <script>
 
 /**
@@ -135,8 +137,6 @@ function jumpToHashtag() {
 
 </script>
 </template>
-
-<script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
 
 <script>
 var thisDocument = document.currentScript.ownerDocument;

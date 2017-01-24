@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 
-<template id="template">
-<div id="viewer">Loading...</div>
+<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 <script src="bower_components/commonmark/dist/commonmark.min.js"></script>
 <script src="bower_components/asciidoctor.js/dist/asciidoctor-all.min.js"></script>
+
+<template id="template">
+<div id="viewer">Loading...</div>
 <script>
 
 /**
@@ -135,8 +137,6 @@ function jumpToHashtag() {
 
 </script>
 </template>
-
-<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
 <script>
 var thisDocument = document.currentScript.ownerDocument;
