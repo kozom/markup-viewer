@@ -8,7 +8,8 @@
   "main": "markup-view.html",
   "keywords": [
     "web-components",
-    "commonmark"
+    "commonmark",
+    "asciidoc"
   ],
   "license": "MIT",
   "ignore": [

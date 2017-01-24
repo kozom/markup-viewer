@@ -3,6 +3,7 @@
 <template id="template">
 <div id="viewer">Loading...</div>
 <script src="bower_components/commonmark/dist/commonmark.min.js"></script>
+<script src="bower_components/asciidoctor.js/dist/asciidoctor-all.min.js"></script>
 <script>
 
 /**
@@ -36,46 +37,90 @@ function getParameterByName(name, uri) {
  * @param {string} uri URI of the markup file
  */
 function updateMarkup(uri) {
+    requestHTTP("GET", uri, function(responseText) {
+        var extension = (uri.match(/\.([a-zA-Z0-9]*)([\?#].*)?$/) || [,""])[1];
+        var html;
+        switch (extension) {
+            case "markdown": case "md":
+                html = parseCommonmark(responseText);
+                break;
+            case "asciidoc": case "adoc":
+                html = parseAsciidoc(responseText);
+                break;
+            default:
+                html = responseText;
+        }
+        document.getElementById("viewer").innerHTML = html;
+        replaceLink(["md", "markdown", "adoc", "asciidoc"]);
+        jumpToHashtag();
+    });
+}
+
+
+/**
+ * Send HTTP request
+ * @param {string}   method   HTTP request method (e.g. "GET", "POST")
+ * @param {string}   uri      URI to send the HTTP request
+ * @param {function} callback Pure function to register as a callback
+ *                            (xhr.responseText is passed as the first argument)
+ * @param {}                  second and below arguments of the callback
+ */
+function requestHTTP(method, uri, callback) {
     var xhr = new XMLHttpRequest();
+    xhr.open(method, uri);
+    var arguments_of_callback = [];
+    for (var i = 2; i < arguments.length; i++) {
+        arguments_of_callback[i - 1] = arguments[i];
+    }
     xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            document.getElementById("viewer").innerHTML = xhr.responseText;
-            renderCommonmark();
-            replaceLink("md");
-            jumpToHashtag();
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            arguments_of_callback[0] = xhr.responseText;
+            callback.apply(this, arguments_of_callback);
         }
     };
-    xhr.open("GET", uri, true);
     xhr.send();
 }
 
 /**
- * Parse and render the markup written in commonmark.
+ * Parse a markup written in Commonmark.
  * <https://github.com/jgm/commonmark.js>
+ * @param {string} text Text written in commonmark
  */
-function renderCommonmark() {
+function parseCommonmark(text) {
     var reader = new commonmark.Parser();
-    var parsed = reader.parse(document.getElementById("viewer").innerHTML);
+    var parsed = reader.parse(text);
     var writer = new commonmark.HtmlRenderer();
-    document.getElementById("viewer").innerHTML = writer.render(parsed);
+    return writer.render(parsed);
 }
 
 /**
- * Replace all links of markup files for AJAX requests
- * @param {string} extension Extension of target markup files
+ * Parse a markup written in Asciidoc.
+ * <https://github.com/asciidoctor/asciidoctor.js>
+ * @param {string} text Text written in Asciidoc
  */
-function replaceLink(extension) {
+function parseAsciidoc(text) {
+    var options = Opal.hash({attributes: ['showtitle']});
+    return Opal.Asciidoctor.$convert(text, options);
+}
+
+/**
+ * Replace all HTML links to markup files for AJAX requests
+ * @param {string[]} extensions Extensions of target markup files
+ */
+function replaceLink(extensions) {
     var links = document.getElementById("viewer").getElementsByTagName("a");
     Array.prototype.forEach.call(links, function(l) {
-        if (RegExp("\." + extension + "$").exec(l.pathname)) {
-            l.onclick = function() {
-                var href = (RegExp(l.origin).exec(l.href))
-                    ? l.pathname + l.search + l.hash: l.href;
-                updateMarkup(href);
-                history.pushState(null, document.title, "?markup=" + href);
-                return false;
-            };
-        }
+        extensions.forEach(function(extension) {
+            if (RegExp("\." + extension + "$").exec(l.pathname)) {
+                l.onclick = function() {
+                    var href = (RegExp(l.origin).exec(l.href))
+                        ? l.pathname + l.hash: l.href;
+                    updateMarkup(href);
+                    history.pushState(null, document.title, "?markup=" + href);
+                    return false;
+                };
+            }
+        });
     });
 }
 
@@ -83,9 +128,9 @@ function replaceLink(extension) {
  * Just jump to hashtag of current address bar
  */
 function jumpToHashtag() {
-    var hashtag = location.hash;
-    location.hash = "";
-    location.hash = hashtag;
+    var hashtag = window.location.hash;
+    window.location.hash = "";
+    window.location.hash = hashtag;
 }
 
 </script>
