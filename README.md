@@ -5,6 +5,24 @@ markup-viewer
 A webcomponent which adds a viewer of markup languages such as commonmark
 
 
+Live Demo
+====================
+
+_`<markup-view>`_ tag works like below.
+
+*   <http://kozom.github.io/markup-viewer/index.html>
+
+You can view files on a static webserver by _markup_ query.
+
+*   Commonmark: <http://kozom.github.io/markup-viewer/index.html?markup=demo.md>
+*   Asciidoc: <http://kozom.github.io/markup-viewer/index.html?markup=demo.adoc>
+
+These are raw files.
+
+*   Raw Commonmark: <http://kozom.github.io/markup-viewer/demo.md>
+*   Raw Asciidoc: <http://kozom.github.io/markup-viewer/demo.adoc>
+
+
 Usage
 ====================
 
