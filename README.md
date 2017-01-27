@@ -2,31 +2,46 @@
 markup-viewer
 ====================
 
-A webcomponent which adds a viewer of markup languages such as commonmark
+A webcomponent which adds a viewer of files written in markup language
+
+Now supports:
+
+*   Commonmark
+
+Powered by:
+
+*   [webcomponents.js](https://github.com/webcomponents/webcomponentsjs)
+*   [commonmark.js](https://github.com/jgm/CommonMark)
 
 
 Live Demo
 ====================
 
-_`<markup-view>`_ tag works like below.
+When you put _`<markup-viewer>`_ tag in a HTML file,
+You can view files on a **static webserver** using _markup_ query.
+**Inline links and links to other markup files are available.**
 
-*   <http://kozom.github.io/markup-viewer/index.html>
-
-You can view files on a static webserver by _markup_ query.
-
-*   Commonmark: <http://kozom.github.io/markup-viewer/index.html?markup=demo.md>
-*   Asciidoc: <http://kozom.github.io/markup-viewer/index.html?markup=demo.adoc>
-
-These are raw files.
-
-*   Raw Commonmark: <http://kozom.github.io/markup-viewer/demo.md>
-*   Raw Asciidoc: <http://kozom.github.io/markup-viewer/demo.adoc>
+*   <http://kozom.github.io/markup-viewer/index.html?markup=demo.md>
 
 
 Usage
 ====================
 
-1.  Install from bower
+If you use cdnjs:
+
+1.  Just put markup-viewer.html and markup files, on a static webserver
+
+2.  Add below three lines on a HTML file
+
+    ```
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.23/webcomponents-lite.min.js"></script>
+    <link rel="import" href="markup-viewer.html" />
+    <markup-viewer></markup-viewer>
+    ```
+
+If you use bower:
+
+1.  Install from bower on a webserver
 
         bower install markup-viewer
 
@@ -37,11 +52,3 @@ Usage
     <link rel="import" href="bower_components/markup-viewer/dist/markup-viewer.html" />
     <markup-viewer></markup-viewer>
     ```
-
-3.  Open the HTML file on your browser like below
-
-        http://your.server/your.html?markup=<uri-of-a-markup-file>
-
-    <uri-of-a-markup-file> must contain valid file extention, e.g. md or adoc.
-
-The markup file will be parsed to HTML and shown on your browser.

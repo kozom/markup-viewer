@@ -22,6 +22,5 @@
   "dependencies": {
     "webcomponentsjs": "webcomponents.js#^0.7.23",
     "commonmark": "^0.27.0",
-    "asciidoctor.js": "^1.5.4"
   }
 }

@@ -2,7 +2,6 @@
 
 <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
 <script src="../../commonmark/dist/commonmark.min.js"></script>
-<script src="../../asciidoctor.js/dist/asciidoctor-all.min.js"></script>
 
 <template id="template">
 <div id="viewer">Loading...</div>
@@ -39,21 +38,15 @@ function getParameterByName(name, uri) {
  * @param {string} uri URI of the markup file
  */
 function updateMarkup(uri) {
+    const EXTENSIONS_MD = ["md", "mdown", "markdown"];
     requestHTTP("GET", uri, function(responseText) {
         var extension = (uri.match(/\.([a-zA-Z0-9]*)([\?#].*)?$/) || [,""])[1];
-        var html;
-        switch (extension) {
-            case "markdown": case "md":
-                html = parseCommonmark(responseText);
-                break;
-            case "asciidoc": case "adoc":
-                html = parseAsciidoc(responseText);
-                break;
-            default:
-                html = responseText;
-        }
+        var match_md = EXTENSIONS_MD.some(function(e) {
+            return (extension.localeCompare(e) === 0);
+        });
+        var html = (match_md) ? parseCommonmark(responseText) : responseText;
         document.getElementById("viewer").innerHTML = html;
-        replaceLink(["md", "markdown", "adoc", "asciidoc"]);
+        replaceLink(EXTENSIONS_MD);
         jumpToHashtag();
     });
 }
