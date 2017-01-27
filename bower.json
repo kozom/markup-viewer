@@ -4,12 +4,11 @@
   "authors": [
     "Kozo <kozom@users.noreply.github.com>"
   ],
-  "description": "A webcomponent which adds a viewer of markup languages such as commonmark",
+  "description": "A webcomponent which adds a viewer of files written in markup language",
   "main": "markup-view.html",
   "keywords": [
     "web-components",
-    "commonmark",
-    "asciidoc"
+    "commonmark"
   ],
   "license": "MIT",
   "ignore": [
@@ -21,6 +20,6 @@
   ],
   "dependencies": {
     "webcomponentsjs": "webcomponents.js#^0.7.23",
-    "commonmark": "^0.27.0",
+    "commonmark": "^0.27.0"
   }
 }
