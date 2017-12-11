@@ -21,8 +21,8 @@ Live Demo
 ========
 
 When you put _`<markup-viewer>`_ tag in a HTML file,
-You can view files on a **static Web server** using _markup_ query.
-**Inline links and links to other markup files are available.**
+You can view files on a __static Web server__ using _markup_ query.
+__Inline links__ and __links to other markup files__ are available.
 
 *   <http://kozom.github.io/markup-viewer/index.html?markup=demo.md>
 
