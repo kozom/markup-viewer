@@ -24,7 +24,7 @@ When you put _`<markup-viewer>`_ tag in a HTML file,
 You can view markup files on a __static Web server__ using `markup` query.
 __Inline links__ and __links to other markup files__ are available.
 
-*   <http://kozom.github.io/markup-viewer/index.html?markup=demo.md>
+*   <http://kozom.github.io/markup-viewer/mv.html?markup=demo.md>
 
 
 Usage
