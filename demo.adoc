@@ -25,7 +25,7 @@ link:demo.adoc#sample_section[inline link demo]
 Sample Section
 --------------
 
-link:demo.md#top[commonmark demo]
+link:demo.md[commonmark demo]
 
 ++++
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

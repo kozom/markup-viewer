@@ -1,54 +1,40 @@
 
 markup-viewer
-====================
+========
 
-A webcomponent which adds a viewer of files written in markup language
+A webcomponent which adds a viewer of files written in markup language.
 
 Now supports:
 
 *   Commonmark
+*   Asciidoc
 
 Powered by:
 
+*   [cdnjs](https://github.com/asciidoctor/asciidoctor.js)
 *   [webcomponents.js](https://github.com/webcomponents/webcomponentsjs)
 *   [commonmark.js](https://github.com/jgm/CommonMark)
+*   [asciidoctor.js](https://github.com/asciidoctor/asciidoctor.js)
 
 
 Live Demo
-====================
+========
 
 When you put _`<markup-viewer>`_ tag in a HTML file,
-You can view files on a **static webserver** using _markup_ query.
+You can view files on a **static Web server** using _markup_ query.
 **Inline links and links to other markup files are available.**
 
 *   <http://kozom.github.io/markup-viewer/index.html?markup=demo.md>
 
 
 Usage
-====================
+========
 
-If you use cdnjs:
+Just put below files on a static Web server:
 
-1.  Just put markup-viewer.html and markup files, on a static webserver
+*   markup-viewer.html: Webcomponent which defines markup-viewer HTML tag
+*   mv.html:            The simplest example using markup-viewer HTML tag
+*   demo.md:            Commonmark demo
+*   demo.adoc:          Asciidoc demo
 
-2.  Add below three lines on a HTML file
-
-    ```
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.23/webcomponents-lite.min.js"></script>
-    <link rel="import" href="markup-viewer.html" />
-    <markup-viewer></markup-viewer>
-    ```
-
-If you use bower:
-
-1.  Install from bower on a webserver
-
-        bower install markup-viewer
-
-2.  Add below three lines on your HTML file
-
-    ```
-    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="bower_components/markup-viewer/dist/markup-viewer.html" />
-    <markup-viewer></markup-viewer>
-    ```
+Then open `mv.html?markup=demo.md` on your web browser.

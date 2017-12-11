@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.23/webcomponents-lite.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/commonmark/0.27.0/commonmark.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/commonmark/0.28.1/commonmark.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/asciidoctor.js/1.5.6-preview.4/asciidoctor.min.js"></script>
 
 <template id="template">
 <div id="viewer">Loading...</div>
@@ -10,16 +11,14 @@
 /**
  * Main script.
  */
-window.onload = function() {
-    var markup = getParameterByName("markup", window.location.search);
-    if (markup) {
-        updateMarkup(markup);
-    } else {
-        document.getElementById("viewer").innerHTML
-            = "Please specify 'markup' query like below.<br><code>"
-            + window.location.origin + window.location.pathname
-            + "?markup=&lturi-of-a-markup-file&gt</code>";
-    }
+var markup = getParameterByName("markup", window.location.search);
+if (markup) {
+    updateMarkup(markup);
+} else {
+    var html = "Please specify 'markup' query like below.<br><code>"
+        + window.location.origin + window.location.pathname
+        + "?markup=&lturi-of-a-markup-file&gt</code>";
+    document.getElementById("viewer").innerHTML = html;
 }
 
 /**
@@ -38,15 +37,21 @@ function getParameterByName(name, uri) {
  * @param {string} uri URI of the markup file
  */
 function updateMarkup(uri) {
-    const EXTENSIONS_MD = ["md", "mdown", "markdown"];
     requestHTTP("GET", uri, function(responseText) {
         var extension = (uri.match(/\.([a-zA-Z0-9]*)([\?#].*)?$/) || [,""])[1];
-        var match_md = EXTENSIONS_MD.some(function(e) {
-            return (extension.localeCompare(e) === 0);
-        });
-        var html = (match_md) ? parseCommonmark(responseText) : responseText;
+        var html;
+        switch (extension) {
+            case "md":
+                html = parseCommonmark(responseText);
+                break;
+            case "adoc":
+                html = parseAsciidoc(responseText);
+                break;
+            default:
+                html = responseText;
+        }
         document.getElementById("viewer").innerHTML = html;
-        replaceLink(EXTENSIONS_MD);
+        replaceLink(["md", "adoc"]);
         jumpToHashtag();
     });
 }
@@ -79,43 +84,49 @@ function requestHTTP(method, uri, callback) {
 /**
  * Parse a markup written in Commonmark.
  * <https://github.com/jgm/commonmark.js>
- * @param {string} text Text written in commonmark
+ * @param  {string} text Text written in commonmark
+ * @return {string} html HTML parsed from the text
  */
 function parseCommonmark(text) {
     var reader = new commonmark.Parser();
     var parsed = reader.parse(text);
     var writer = new commonmark.HtmlRenderer();
-    return writer.render(parsed);
+    var html = writer.render(parsed);
+    return html;
 }
 
 /**
  * Parse a markup written in Asciidoc.
  * <https://github.com/asciidoctor/asciidoctor.js>
- * @param {string} text Text written in Asciidoc
+ * @param {string}  text Text written in Asciidoc
+ * @return {string} html HTML parsed from the text
  */
 function parseAsciidoc(text) {
-    var options = Opal.hash({attributes: ['showtitle']});
-    return Opal.Asciidoctor.$convert(text, options);
+    var asciidoctor = Asciidoctor();
+    var html = asciidoctor.convert(text);
+    return html;
 }
 
 /**
- * Replace all HTML links to markup files for AJAX requests
+ * Modify DOM to replace all links of markup files to use 'markup' query.
  * @param {string[]} extensions Extensions of target markup files
  */
 function replaceLink(extensions) {
     var links = document.getElementById("viewer").getElementsByTagName("a");
     Array.prototype.forEach.call(links, function(l) {
-        extensions.forEach(function(extension) {
-            if (RegExp("\." + extension + "$").exec(l.pathname)) {
-                l.onclick = function() {
-                    var href = (RegExp(l.origin).exec(l.href))
-                        ? l.pathname + l.hash: l.href;
-                    updateMarkup(href);
-                    history.pushState(null, document.title, "?markup=" + href);
-                    return false;
-                };
-            }
-        });
+        var extension = (l.href.match(/\.([a-zA-Z0-9]*)([\?#].*)?$/)||[,""])[1];
+        var match = extensions.some(function(e){ return (e === extension); });
+        if (match) {
+            l.addEventListener("click", function(e) {
+                var path = window.location.origin + window.location.pathname;
+                var href = (window.location.origin === l.origin)
+                    ? path + "?markup=" + l.pathname + l.hash // simplified url
+                    : path + "?markup=" + l.href;
+                updateMarkup(href);
+                history.replaceState(null, null, href);
+                e.preventDefault();
+            }, false);
+        }
     });
 }
 

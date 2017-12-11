@@ -21,9 +21,7 @@ Note: The text avobe is from [here](http://spec.commonmark.org/dingus/).
 Sample Section
 ==============
 
-<!--
-[asciidoc demo](demo.adoc#top)
--->
+[asciidoc demo](demo.adoc)
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
