@@ -2,7 +2,7 @@
 markup-viewer
 ========
 
-A webcomponent which adds a viewer of files written in markup language.
+A webcomponent which adds a viewer of lightweight markup language.
 
 Now supports:
 
